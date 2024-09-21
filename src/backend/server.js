@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { WebSocketServer } from 'ws';
-import fs from 'fs/promises';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { User } from './models/Users.js';
@@ -59,21 +58,15 @@ const loadStats = async () => {
 const saveStats = async () => {
     try {
         await GameStats.updateOne({}, {
-            $set: {
-                activePlayers: stats.activePlayers,
-                visits: stats.visits,
-                likes: stats.likes,
-                favorites: stats.favorites,
-            }
-        }, { upsert: true }); // Use upsert to create the document if it doesn't exist
+            $set: stats
+        }, { upsert: true });
     } catch (err) {
         console.error('Error saving stats to MongoDB:', err);
     }
 };
 
-
 const authenticateToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]; // Make sure it's split properly
+    const token = req.headers['authorization']?.split(' ')[1];
     if (!token) return res.sendStatus(403); // No token provided
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
@@ -90,8 +83,6 @@ app.get('/', (_req, res) => {
 // Register route
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-
-    // Check if the user already exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
         return res.status(400).send('User already exists');
@@ -131,18 +122,15 @@ app.post('/login', async (req, res) => {
 app.post('/reset-password', async (req, res) => {
     const { username, newPassword } = req.body;
 
-    // Check if the user exists
     const user = await User.findOne({ username });
     if (!user) {
         return res.status(400).send('User not found');
     }
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
 
     try {
-        // Update the user's password in the database
-        user.password = hashedPassword;
         await user.save();
         res.status(200).send('Password updated successfully');
     } catch (err) {
@@ -150,7 +138,6 @@ app.post('/reset-password', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
-
 
 // Load stats on server start
 await loadStats();
