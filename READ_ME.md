@@ -6,7 +6,6 @@ Welcome to the 112-Studios website repository! This project provides useful info
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [License](#license)
 
