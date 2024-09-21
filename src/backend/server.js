@@ -19,13 +19,13 @@ const limiter = rateLimit({
 });
 
 const app = express();
-app.set('trust proxy', 1); // Trust first proxy
+app.set('trust proxy', 1);
 app.use(json());
 app.use(helmet());
-app.use(cors({ origin: 'https://112-studios.github.io' })); // Allow your GitHub Pages domain
+app.use(cors({ origin: 'https://112-studios.github.io' })); 
 app.use(limiter);
 
-const mongoUri = process.env.MONGODB_URI; // Ensure this matches your .env variable name
+const mongoUri = process.env.MONGODB_URI; 
 
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
@@ -63,7 +63,7 @@ const saveStats = async () => {
                 likes: stats.likes,
                 favorites: stats.favorites,
             }
-        }, { upsert: true }); // Use upsert to create the document if it doesn't exist
+        }, { upsert: true });
     } catch (err) {
         console.error('Error saving stats to MongoDB:', err);
     }
@@ -167,7 +167,7 @@ const broadcastStats = () => {
 // Save stats every minute
 setInterval(saveStats, 60000);
 
-const PORT = process.env.PORT || 3000; // Use 3000 as the default port
+const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
