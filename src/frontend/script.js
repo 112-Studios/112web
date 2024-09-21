@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = localStorage.getItem('JWT_SECRET'); // Retrieve the token from local storage or a variable
     
         try {
-            const response = await fetch('https://72d3-89-153-106-219.ngrok-free.app/stats', {
+            const response = await fetch('https://f3d9-87-196-81-251.ngrok-free.app', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // WebSocket for real-time stats updates
     const setupWebSocket = () => {
-        const ws = new WebSocket('wss://72d3-89-153-106-219.ngrok-free.app');
+        const ws = new WebSocket('wss://f3d9-87-196-81-251.ngrok-free.app');
 
         ws.onopen = () => {
             ws.send(JSON.stringify({ header: 'ngrok-skip-browser-warning', value: 'true' }));
