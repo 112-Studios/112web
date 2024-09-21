@@ -106,9 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         likes: document.getElementById('likes'),
         visits: document.getElementById('visits'),
         activePlayers: document.getElementById('active-players'),
-        serverStatus: document.getElementById('serverStatus')
+        serverStatus: document.getElementById('serverStatus'),
     };
-
+    
     // Function to update game stats on the page
     const updateGameStats = (stats) => {
         gameStats.favorites.innerText = stats.favorites || '0';
@@ -116,21 +116,21 @@ document.addEventListener('DOMContentLoaded', () => {
         gameStats.visits.innerText = stats.visits || '0';
         gameStats.activePlayers.innerText = stats.activePlayers || '0';
     };
-
+    
     const fetchInitialStats = async () => {
         const token = localStorage.getItem('JWT_SECRET'); // Retrieve the token from local storage or a variable
-    
+        
         try {
-            const response = await fetch('https://f3d9-87-196-81-251.ngrok-free.app', {
+            const response = await fetch('https://f3d9-87-196-81-251.ngrok-free.app/stats', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-    
+        
             if (!response.ok) {
                 throw new Error('Failed to fetch stats from the server');
             }
-    
+        
             const data = await response.json();
             updateGameStats(data.stats);
         } catch (error) {
@@ -138,33 +138,34 @@ document.addEventListener('DOMContentLoaded', () => {
             gameStats.serverStatus.innerText = 'Stats are outdated or the server is down.';
         }
     };
-
+    
     // WebSocket for real-time stats updates
     const setupWebSocket = () => {
         const ws = new WebSocket('wss://f3d9-87-196-81-251.ngrok-free.app');
-
+    
         ws.onopen = () => {
             ws.send(JSON.stringify({ header: 'ngrok-skip-browser-warning', value: 'true' }));
             console.log('WebSocket connection opened');
         };
-
+    
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             updateGameStats(data.stats);
         };
-
+    
         ws.onerror = (error) => {
             console.error('WebSocket error:', error);
         };
-
+    
         ws.onclose = () => {
             gameStats.serverStatus.innerText = 'Server is down. Stats are outdated.';
         };
     };
-
+    
     // Initialize game stats
     fetchInitialStats();
     setupWebSocket();
+
 
     // **Careers Page Specific**
     const positions = [
