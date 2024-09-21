@@ -1,0 +1,9 @@
+/* Global Styles */
+body, html {
+    font-family: 'Roboto', sans-serif;
+    color: #000000;
+    scrollbar-width: 0px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer */
+    text-align: center;
+}
