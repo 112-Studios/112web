@@ -1,187 +1,197 @@
-import express, { json } from 'express';
-import mongoose from 'mongoose';
-import { config } from 'dotenv';
-import helmet from 'helmet';
-import cors from 'cors';
-import rateLimit from 'express-rate-limit';
-import { WebSocketServer } from 'ws';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { User } from './models/Users.js';
-import { GameStats } from './models/GameStats.js';
+document.addEventListener('DOMContentLoaded', () => {
+    // Scroll-based Animations for Sections
+    const sections = document.querySelectorAll('section');
+    const sectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
 
-config(); // Load environment variables
+    sections.forEach(section => sectionObserver.observe(section));
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100
-});
+    // Back-to-Top Button
+    const backToTopButton = document.createElement('button');
+    backToTopButton.id = 'back-to-top';
+    backToTopButton.innerText = '↑';
+    document.body.appendChild(backToTopButton);
+    backToTopButton.style.display = 'none';
 
-const app = express();
-app.set('trust proxy', 1); // Trust first proxy
-app.use(json());
-app.use(helmet());
-app.use(cors({
-    origin: ['https://112-studios.github.io', 'https://f3d9-87-196-81-251.ngrok-free.app']
-}));
-app.use(limiter);
+    window.addEventListener('scroll', () => {
+        backToTopButton.style.display = window.scrollY > 500 ? 'block' : 'none';
+    });
 
-const mongoUri = process.env.MONGODB_URI; // Ensure this matches your .env variable name
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showTopbar();
+    });
 
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+    let lastScrollTop = 0;
+    const header = document.querySelector('.topbar');
 
-let stats = {
-    activePlayers: 0,
-    visits: 0,
-    likes: 0,
-    favorites: 0,
-};
-
-const loadStats = async () => {
-    try {
-        const statsFromDb = await GameStats.findOne({});
-        if (statsFromDb) {
-            stats = {
-                activePlayers: statsFromDb.activePlayers,
-                visits: statsFromDb.visits,
-                likes: statsFromDb.likes,
-                favorites: statsFromDb.favorites,
-            };
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            hideTopbar();
+        } else if (scrollTop < lastScrollTop) {
+            showTopbar();
         }
-    } catch (err) {
-        console.error('Error loading stats from MongoDB:', err);
-    }
-};
-
-const saveStats = async () => {
-    try {
-        await GameStats.updateOne({}, {
-            $set: stats
-        }, { upsert: true });
-    } catch (err) {
-        console.error('Error saving stats to MongoDB:', err);
-    }
-};
-
-const authenticateToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) return res.sendStatus(403); // No token provided
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403); // Token is invalid
-        req.user = user; // Token is valid, proceed
-        next();
+        lastScrollTop = scrollTop;
+        if (scrollTop === 0) showTopbar();
     });
-};
 
-app.get('/', (_req, res) => {
-    res.send('Welcome to 112-Studios API');
-});
-
-// Register route
-app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-        return res.status(400).send('User already exists');
+    function hideTopbar() {
+        header.classList.add('hide-header');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword });
-
-    try {
-        await user.save();
-        res.status(201).send('User registered');
-    } catch (err) {
-        console.error('Error registering user:', err);
-        res.status(500).send('Internal server error');
-    }
-});
-
-// Login route
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    
-    const user = await User.findOne({ username });
-    if (!user) {
-        return res.status(400).send('Invalid credentials');
+    function showTopbar() {
+        header.classList.remove('hide-header');
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        return res.status(400).send('Invalid credentials');
-    }
+    // Section Highlighting in the Navbar
+    const navLinks = document.querySelectorAll('nav a');
+    const sectionPositions = [...sections].map(section => ({
+        id: section.id,
+        offset: section.offsetTop
+    }));
 
-    const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
-});
-
-// Password reset route
-app.post('/reset-password', async (req, res) => {
-    const { username, newPassword } = req.body;
-
-    const user = await User.findOne({ username });
-    if (!user) {
-        return res.status(400).send('User not found');
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-
-    try {
-        await user.save();
-        res.status(200).send('Password updated successfully');
-    } catch (err) {
-        console.error('Error updating password:', err);
-        res.status(500).send('Internal server error');
-    }
-});
-
-// Load stats on server start
-await loadStats();
-
-app.get('/stats', authenticateToken, (_req, res) => {
-    res.json({ stats, serverStatus: 'online' });
-});
-
-app.post('/increment/:stat', authenticateToken, async (req, res) => {
-    const { stat } = req.params;
-    if (['visits', 'likes', 'favorites'].includes(stat)) {
-        stats[stat]++;
-        await saveStats();
-        return res.json({ [stat]: stats[stat] });
-    }
-    res.sendStatus(400);
-});
-
-// WebSocket setup
-const wss = new WebSocketServer({ port: 8081 });
-wss.on('connection', (ws) => {
-    stats.activePlayers++;
-    broadcastStats();
-    
-    ws.on('close', async () => {
-        stats.activePlayers--;
-        await saveStats();
-        broadcastStats();
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        sectionPositions.forEach(({ id, offset }, index) => {
+            if (currentScroll >= offset - 100 && (index === sectionPositions.length - 1 || currentScroll < sectionPositions[index + 1].offset - 100)) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`nav a[href="#${id}"]`);
+                if (activeLink) activeLink.classList.add('active');
+            }
+        });
     });
-});
 
-const broadcastStats = () => {
-    const statData = { stats, serverStatus: 'online' };
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(statData));
+    // Lazy Loading Images
+    const lazyImages = document.querySelectorAll('img[data-src]');
+    const imgObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                imgObserver.unobserve(img);
+            }
+        });
+    }, { rootMargin: '0px 0px 50px 0px', threshold: 0.01 });
+
+    lazyImages.forEach(img => imgObserver.observe(img));
+
+    // Game Statistics
+    const gameStats = {
+        favorites: document.getElementById('favorites'),
+        likes: document.getElementById('likes'),
+        visits: document.getElementById('visits'),
+        activePlayers: document.getElementById('active-players'),
+        serverStatus: document.getElementById('serverStatus')
+    };
+
+    const updateGameStats = (stats) => {
+        gameStats.favorites.innerText = stats.favorites || '0';
+        gameStats.likes.innerText = stats.likes || '0';
+        gameStats.visits.innerText = stats.visits || '0';
+        gameStats.activePlayers.innerText = stats.activePlayers || '0';
+    };
+
+    const fetchInitialStats = async () => {
+        const token = localStorage.getItem('JWT_SECRET'); // Retrieve token
+        try {
+            const response = await fetch('https://f3d9-87-196-81-251.ngrok-free.app/stats', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`Failed to fetch stats from the server: ${text}`);
+            }
+
+            const data = await response.json();
+            updateGameStats(data.stats);
+        } catch (error) {
+            console.error(error);
+            gameStats.serverStatus.innerText = 'Stats are outdated or the server is down.';
+        }
+    };
+
+    const setupWebSocket = () => {
+        const ws = new WebSocket('wss://f3d9-87-196-81-251.ngrok-free.app');
+
+        ws.onopen = () => {
+            console.log('WebSocket connection opened');
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            updateGameStats(data.stats);
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+            gameStats.serverStatus.innerText = 'Server is down. Stats are outdated.';
+            setTimeout(setupWebSocket, 5000); // Reconnect after 5 seconds
+        };
+    };
+
+    fetchInitialStats();
+    setupWebSocket();
+
+    // **Careers Page Specific**
+    const positions = [
+        { title: "UI & UX Designer(1x)", description: "As a UI & UX Designer at 112-Studios, you will be responsible for crafting intuitive and visually appealing user interfaces while ensuring an optimal user experience. You will design and implement user interfaces that are both functional and aesthetically pleasing, and collaborate closely with other team members to ensure a seamless and engaging player experience. Your role will also involve conducting user research and usability testing to refine designs and enhance the overall user journey." },
+        { title: "Quality Assurance Tester(1x)", description: "As a Quality Assurance Tester at 112-Studios, you will play a critical role in ensuring the quality and stability of our games. You will be responsible for conducting thorough testing of game features and functionalities to identify bugs, inconsistencies, and issues. Your work will involve documenting findings, collaborating with the development team to resolve issues, and ensuring that the final product meets our high standards of quality before release." },
+        { title: "Texturer(1x)", description: "As a Texturer at 112-Studios, you will be responsible for creating and applying textures to 3D models and environments to enhance their visual realism and detail. You will work closely with modelers and artists to develop high-quality textures that bring our game assets to life. Your role will involve creating texture maps, ensuring consistency across assets, and optimizing textures for performance."},
+        { title: "Digital Artist(1x)", description: "As a Digital Artist at 112-Studios, you will be responsible for creating high-quality digital artwork that contributes to the visual style and aesthetic of our games. Your role will involve designing characters, environments, and other visual elements, as well as collaborating with other team members to ensure a cohesive and visually engaging game experience. You will utilize your artistic skills to bring creativity and visual appeal to our projects."},
+        { title: "Organic Modeler(2x)", description: "As an Organic Modeler at 112-Studios, you will specialize in creating detailed and realistic organic 3D models, such as characters, creatures, and natural elements. Your role will involve sculpting, texturing, and refining models to achieve high levels of detail and realism. You will work closely with other artists and designers to ensure that your models fit seamlessly into the game world and contribute to an immersive player experience."},
+    ];
+
+    const positionsList = document.getElementById('positions-list');
+    const noPositions = document.getElementById('no-positions');
+
+    // Function to add positions to the list with fade-in animation
+    function addPositions(startIndex, count) {
+        const positionsSubset = positions.slice(startIndex, startIndex + count);
+        if (positionsSubset.length > 0) {
+            noPositions.style.display = 'none';
+            positionsSubset.forEach((position, index) => {
+                const positionItem = document.createElement('div');
+                positionItem.classList.add('open-position-styles');
+                positionItem.innerHTML = `
+                    <h2>${position.title}</h2>
+                    <p>${position.description}</p>
+                `;
+                positionsList.appendChild(positionItem);
+
+                // Delay the fade-in effect for smooth animation
+                setTimeout(() => {
+                    positionItem.classList.add('visible');
+                }, index * 500); // Delay each position fade by 500ms
+            });
+        } else {
+            noPositions.style.display = 'block';
+        }
+    }
+
+    let positionsLoaded = 0;
+    const positionsPerLoad = 2; // Number of positions to load each time
+
+    // Initial load
+    addPositions(positionsLoaded, positionsPerLoad);
+    positionsLoaded += positionsPerLoad;
+
+    // **Infinite Scrolling**
+    window.addEventListener('scroll', () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+            if (positionsLoaded < positions.length) {
+                addPositions(positionsLoaded, positionsPerLoad);
+                positionsLoaded += positionsPerLoad;
+            }
         }
     });
-};
-
-// Save stats every minute
-setInterval(saveStats, 60000);
-
-const PORT = process.env.PORT || 3000; // Use 3000 as the default port
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
 });
