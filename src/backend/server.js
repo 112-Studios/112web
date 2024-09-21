@@ -8,8 +8,8 @@ import { WebSocketServer } from 'ws';
 import fs from 'fs/promises';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { User } from '.src/models/Users.js';
-import { GameStats } from '.src/models/GameStats.js';
+import { User } from './src/models/Users.js';
+import { GameStats } from './src/models/GameStats.js';
 
 config(); // Load environment variables
 
