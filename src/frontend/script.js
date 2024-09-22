@@ -81,6 +81,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lazyImages.forEach(img => imgObserver.observe(img));
 
+
+    // Privacy Policy Pop-up and Page Unlocking
+    const privacyPopup = document.getElementById('privacy-popup');
+    const acceptPolicyButton = document.getElementById('accept-policy');
+    const contentToLock = document.querySelectorAll('.content-section'); // All sections except topbar
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const policyAccepted = localStorage.getItem('policyAccepted');
+
+        if (!policyAccepted) {
+            // Show the privacy popup by adding the 'visible' class
+            privacyPopup.classList.add('visible');
+            // Lock all content sections by adding the 'locked-content' class
+            contentToLock.forEach(section => section.classList.add('locked-content'));
+        }
+
+        acceptPolicyButton.addEventListener('click', () => {
+            // Store the user's acceptance of the policy in localStorage
+            localStorage.setItem('policyAccepted', true);
+            // Hide the popup by removing the 'visible' class
+            privacyPopup.classList.remove('visible');
+            // Unlock all content sections by removing the 'locked-content' class
+            contentToLock.forEach(section => section.classList.remove('locked-content'));
+        });
+    });
+
+
+
+    // NewsLetter 
+    const newsletterForm = document.getElementById('newsletter-form');
+    const emailInput = document.getElementById('email');
+    const verificationSection = document.getElementById('verification-section');
+    const verificationCodeInput = document.getElementById('verification-code');
+    const verifyCodeButton = document.getElementById('verify-code');
+    const newsletterMessage = document.getElementById('newsletter-message');
+    
+    newsletterForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = emailInput.value;
+    
+        // Email validation for well-known domains
+        const validEmailDomains = ["gmail.com", "yahoo.com", "outlook.com", "icloud.com", "hotmail.com"];
+        const emailDomain = email.split('@')[1];
+        if (!validEmailDomains.includes(emailDomain)) {
+            alert('Valid Email Domains: gmail.com | yahoo.com | outlook.com | icloud.com | hotmail.com | < --- Use one of those.');
+            return;
+        }
+    
+        try {
+            const response = await fetch('/send-verification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+    
+            if (response.ok) {
+                newsletterMessage.innerText = 'Verification code sent. Please check your email.';
+                verificationSection.style.display = 'block';
+            } else {
+                newsletterMessage.innerText = 'Failed to send verification code. Try again later.';
+            }
+        } catch (error) {
+            newsletterMessage.innerText = 'Error sending verification code.';
+        }
+    });
+    
+    verifyCodeButton.addEventListener('click', async () => {
+        const verificationCode = verificationCodeInput.value;
+        const email = emailInput.value;
+    
+        try {
+            const response = await fetch('/verify-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, verificationCode })
+            });
+    
+            if (response.ok) {
+                newsletterMessage.innerText = 'You are subscribed to the newsletter!';
+            } else {
+                newsletterMessage.innerText = 'Invalid verification code.';
+            }
+        } catch (error) {
+            newsletterMessage.innerText = 'Error verifying the code.';
+        }
+    });
+    
+    
     // Game Statistics
     const gameStats = {
         favorites: document.getElementById('favorites'),
@@ -100,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fetchInitialStats = async () => {
         const token = localStorage.getItem('JWT_SECRET'); // Retrieve token
         try {
-            const response = await fetch('https://f3d9-87-196-81-251.ngrok-free.app/stats', {
+            const response = await fetch('https://15fe-89-153-106-173.ngrok-free.app/stats', {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -118,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const setupWebSocket = () => {
-        const ws = new WebSocket('wss://f3d9-87-196-81-251.ngrok-free.app');
+        const ws = new WebSocket('wss://15fe-89-153-106-173.ngrok-free.app');
 
         ws.onopen = () => {
             console.log('WebSocket connection opened');
