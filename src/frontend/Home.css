@@ -192,12 +192,12 @@ nav a.active {
     left: 50%;
     width: 120%; /* Slightly larger than the icon */
     height: 120%;
-    border-radius: 35%; /* Makes the glow effect round */
-    background: rgba(0, 0, 0, 0); /* Transparent background initially */
+    border-radius: 35%;    
+    background: rgba(0, 0, 0, 0); 
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease;
     opacity: 0;
-    z-index: 0; /* Ensure the neon effect is behind the image */
+    z-index: 0; 
 }
 
 /* Hover Effect */
@@ -209,64 +209,76 @@ nav a.active {
     transform: scale(1.1); /* Slight zoom effect on hover */
 }
 
-/* Game Card Styles */
-.game-image {
-    width: 50%;
-    margin-top: -250%;
-    right: auto;
-    border: 1px solid #000000;
-    border-radius: 15px;
-    align-self: center;
+/* Games Section */
+.games-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 0;
 }
 
-.game-main-details {
-    margin-top: 15px;
-    text-align: center; 
-    text-wrap: normal; 
-    width: 35%; 
-    margin-right: auto; 
-    margin-left: auto; 
-    line-height: 1.5;
-}
-
-.game-card {
-    border: 1px solid #ddd;
+.game-item {
+    background: linear-gradient(145deg, #1b1b1b, #121212);
     border-radius: 15px;
-    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    margin: 15px;
     width: 300px;
-    margin: 0 left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #111;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
 }
 
-.game-card-image {
+.game-item:hover {
+    transform: scale(1.05);
+}
+
+.game-image {
     width: 100%;
     height: auto;
-    display: block;
+    border-bottom: 1px solid #444;
 }
 
-.game-card-details {
-    padding: 20px;
-    text-align: center;
-    background-color: #1a1a1a;
-}
-
-.game-card-details h3 {
+.game-title {
     font-size: 1.5rem;
-    margin-bottom: 10px;
     color: #fff;
+    margin: 15px 0;
 }
 
-.game-card-stats {
+.game-stats {
     list-style-type: none;
     padding: 0;
     color: #ccc;
+    margin: 0;
 }
 
 .game-stats li {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-bottom: 5px;
 }
+
+.server-status {
+    color: #ff6666;
+    font-size: 0.9rem;
+    margin: 10px 0;
+}
+
+.learn-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #3a3a3a;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.learn-more:hover {
+    background-color: #5a5a5a;
+}
+
+  
   
   
 .link-icon {
