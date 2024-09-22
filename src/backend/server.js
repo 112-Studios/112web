@@ -33,9 +33,10 @@ const app = express();
 app.set('trust proxy', 1); // Trust first proxy
 app.use(json());
 app.use(helmet());
-app.use(cors({
-    origin: ['https://112-studios.github.io', 'https://15fe-89-153-106-173.ngrok-free.app']
-}));
+app.use(cors()); // temporary
+// app.use(cors({
+//    origin: ['https://112-studios.github.io', 'https://15fe-89-153-106-173.ngrok-free.app']
+//}));
 app.use(limiter);
 
 // ------ CONNECTION WITH DATA-BASE ------ \\
@@ -43,6 +44,7 @@ app.use(limiter);
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
+
 
 // ------ NEWSLETTER ROUTES ------ \\
 
