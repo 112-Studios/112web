@@ -81,35 +81,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lazyImages.forEach(img => imgObserver.observe(img));
 
-
-    // Privacy Policy Pop-up and Page Unlocking
-    const privacyPopup = document.getElementById('privacy-popup');
-    const acceptPolicyButton = document.getElementById('accept-policy');
-    const contentToLock = document.querySelectorAll('.content-section'); // All sections except topbar
-
     document.addEventListener('DOMContentLoaded', () => {
+        const privacyPopup = document.getElementById('privacy-popup');
+        const acceptPolicyButton = document.getElementById('accept-policy');
+    
+        // Show the pop-up if the policy hasn't been accepted
         const policyAccepted = localStorage.getItem('policyAccepted');
-
         if (!policyAccepted) {
-            // Show the privacy popup by adding the 'visible' class
             privacyPopup.classList.add('visible');
-            // Lock all content sections by adding the 'locked-content' class
-            contentToLock.forEach(section => section.classList.add('locked-content'));
+            document.body.classList.add('locked-content'); // Lock the body content
         }
-
+    
         acceptPolicyButton.addEventListener('click', () => {
-            // Store the user's acceptance of the policy in localStorage
             localStorage.setItem('policyAccepted', true);
-            // Hide the popup by removing the 'visible' class
             privacyPopup.classList.remove('visible');
-            // Unlock all content sections by removing the 'locked-content' class
-            contentToLock.forEach(section => section.classList.remove('locked-content'));
+            document.body.classList.remove('locked-content'); // Unlock the body content
         });
     });
+    
 
-
-
-    // NewsLetter 
+    // Newsletter Functionality
     const newsletterForm = document.getElementById('newsletter-form');
     const emailInput = document.getElementById('email');
     const verificationSection = document.getElementById('verification-section');
@@ -167,8 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newsletterMessage.innerText = 'Error verifying the code.';
         }
     });
-    
-    
+
     // Game Statistics
     const gameStats = {
         favorites: document.getElementById('favorites'),
@@ -234,52 +224,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const positions = [
         { title: "UI & UX Designer(1x)", description: "As a UI & UX Designer at 112-Studios, you will be responsible for crafting intuitive and visually appealing user interfaces while ensuring an optimal user experience. You will design and implement user interfaces that are both functional and aesthetically pleasing, and collaborate closely with other team members to ensure a seamless and engaging player experience. Your role will also involve conducting user research and usability testing to refine designs and enhance the overall user journey." },
         { title: "Quality Assurance Tester(1x)", description: "As a Quality Assurance Tester at 112-Studios, you will play a critical role in ensuring the quality and stability of our games. You will be responsible for conducting thorough testing of game features and functionalities to identify bugs, inconsistencies, and issues. Your work will involve documenting findings, collaborating with the development team to resolve issues, and ensuring that the final product meets our high standards of quality before release." },
-        { title: "Texturer(1x)", description: "As a Texturer at 112-Studios, you will be responsible for creating and applying textures to 3D models and environments to enhance their visual realism and detail. You will work closely with modelers and artists to develop high-quality textures that bring our game assets to life. Your role will involve creating texture maps, ensuring consistency across assets, and optimizing textures for performance."},
-        { title: "Digital Artist(1x)", description: "As a Digital Artist at 112-Studios, you will be responsible for creating high-quality digital artwork that contributes to the visual style and aesthetic of our games. Your role will involve designing characters, environments, and other visual elements, as well as collaborating with other team members to ensure a cohesive and visually engaging game experience. You will utilize your artistic skills to bring creativity and visual appeal to our projects."},
-        { title: "Organic Modeler(2x)", description: "As an Organic Modeler at 112-Studios, you will specialize in creating detailed and realistic organic 3D models, such as characters, creatures, and natural elements. Your role will involve sculpting, texturing, and refining models to achieve high levels of detail and realism. You will work closely with other artists and designers to ensure that your models fit seamlessly into the game world and contribute to an immersive player experience."},
+        { title: "Texturer(1x)", description: "As a Texturer at 112-Studios, you will be responsible for creating and applying textures to 3D models and environments to enhance their visual realism and detail. You will work closely with modelers and artists to develop high-quality textures that bring our game assets to life. Your role will involve collaborating with the team to ensure that textures align with the artistic vision of our projects and contribute to an immersive gaming experience." }
     ];
 
-    const positionsList = document.getElementById('positions-list');
-    const noPositions = document.getElementById('no-positions');
+    const careersContainer = document.getElementById("careers-positions");
 
-    // Function to add positions to the list with fade-in animation
-    function addPositions(startIndex, count) {
-        const positionsSubset = positions.slice(startIndex, startIndex + count);
-        if (positionsSubset.length > 0) {
-            noPositions.style.display = 'none';
-            positionsSubset.forEach((position, index) => {
-                const positionItem = document.createElement('div');
-                positionItem.classList.add('open-position-styles');
-                positionItem.innerHTML = `
-                    <h2>${position.title}</h2>
-                    <p>${position.description}</p>
-                `;
-                positionsList.appendChild(positionItem);
-
-                // Delay the fade-in effect for smooth animation
-                setTimeout(() => {
-                    positionItem.classList.add('visible');
-                }, index * 500); // Delay each position fade by 500ms
-            });
-        } else {
-            noPositions.style.display = 'block';
-        }
-    }
-
-    let positionsLoaded = 0;
-    const positionsPerLoad = 2; // Number of positions to load each time
-
-    // Initial load
-    addPositions(positionsLoaded, positionsPerLoad);
-    positionsLoaded += positionsPerLoad;
-
-    // **Infinite Scrolling**
-    window.addEventListener('scroll', () => {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
-            if (positionsLoaded < positions.length) {
-                addPositions(positionsLoaded, positionsPerLoad);
-                positionsLoaded += positionsPerLoad;
-            }
-        }
+    positions.forEach((position) => {
+        const positionDiv = document.createElement("div");
+        positionDiv.classList.add("position");
+        positionDiv.innerHTML = `<h3>${position.title}</h3><p>${position.description}</p>`;
+        careersContainer.appendChild(positionDiv);
     });
 });
