@@ -237,8 +237,8 @@ nav a.active {
     padding: 20px;
     border-top: 2px solid #8A837F;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items */
     z-index: 1000;
     opacity: 0;  /* Initially hidden */
     pointer-events: none;  /* Prevent interaction when hidden */
@@ -254,12 +254,6 @@ nav a.active {
 .locked-content {
     pointer-events: none;
     opacity: 0.5; /* Dim the content while it's locked */
-}
-
-
-.locked-content {
-    pointer-events: none;
-    opacity: 0.5;
 }
 
 /* Center Newsletter Form on Screen */
@@ -310,4 +304,20 @@ nav a.active {
 
 #newsletter-form button:hover {
     background-color: #6F665C;
+}
+
+/* Additional Styles for Pop-up Overlay */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Dim the background */
+    z-index: 999; /* Behind the popup */
+    display: none; /* Initially hidden */
+}
+
+#overlay.visible {
+    display: block; /* Show overlay when popup is visible */
 }
