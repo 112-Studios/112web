@@ -1,36 +1,116 @@
+// ------ IMPORTS ------ \\
 import express, { json } from 'express';
 import mongoose from 'mongoose';
 import { config } from 'dotenv';
+import nodemailer from 'nodemailer';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import { WebSocketServer } from 'ws';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import validator from 'validator';
+import fs from 'fs';
 import { User } from './models/Users.js';
 import { GameStats } from './models/GameStats.js';
 
+
+// ------ SECRETS SETUP ------ \\
+
 config(); // Load environment variables
+const mongoUri = process.env.MONGODB_URI;
+
+// ------ SECURITY RATE SETUP ------ \\
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100
 });
 
+// ------ EXPRESS, ALLOWED ORIGINS ------ \\
+
 const app = express();
 app.set('trust proxy', 1); // Trust first proxy
 app.use(json());
 app.use(helmet());
 app.use(cors({
-    origin: ['https://112-studios.github.io', 'https://f3d9-87-196-81-251.ngrok-free.app']
+    origin: ['https://112-studios.github.io', 'https://15fe-89-153-106-173.ngrok-free.app']
 }));
 app.use(limiter);
 
-const mongoUri = process.env.MONGODB_URI; // Ensure this matches your .env variable name
+// ------ CONNECTION WITH DATA-BASE ------ \\
 
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
+
+
+// ------ NEWSLETTER ROUTES ------ \\
+
+// Create a transporter for Nodemailer using Gmail's SMTP server
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS, 
+    },
+});
+
+// Store verification codes in memory
+const verificationCodes = {};
+
+// Newsletter route to send verification email
+app.post('/send-verification', (req, res) => {
+    const { email } = req.body;
+
+    // Validate the email format
+    if (!validator.isEmail(email)) {
+        return res.status(400).send('Invalid email');
+    }
+
+    // Generate a 6-digit random verification code
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    verificationCodes[email] = verificationCode; // Store the code in memory
+
+    // Define the email options
+    const mailOptions = {
+        from: process.env.EMAIL_USER, // Sender address
+        to: email, // Receiver address
+        subject: 'Your Newsletter Verification Code',
+        text: `Your verification code is: ${verificationCode}`, // Email body
+    };
+
+    // Send the email using Nodemailer
+    transporter.sendMail(mailOptions)
+        .then(() => {
+            res.send('Verification email sent'); // Success response
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Failed to send email'); // Error response
+        });
+});
+
+// Newsletter route to verify the code
+app.post('/verify-code', (req, res) => {
+    const { email, code } = req.body;
+
+    // Check if the provided code matches the stored one
+    if (verificationCodes[email] === code) {
+        delete verificationCodes[email]; // Remove the code after use
+
+        // Save the verified email to CSV
+        const csvLine = `${email},${new Date().toISOString()}\n`;
+        fs.appendFileSync('./backend/newsSubs.csv', csvLine); // Save to the CSV file
+
+        res.send('You are subscribed to the newsletter!'); // Success response
+    } else {
+        res.status(400).send('Verification failed'); // Error response for invalid code
+    }
+});
+
+
+// ------ SETUP & LOAD OF GAME STATS ------ \\
 
 let stats = {
     activePlayers: 0,
@@ -64,6 +144,8 @@ const saveStats = async () => {
         console.error('Error saving stats to MongoDB:', err);
     }
 };
+
+// ------ AUTHENTICATION & ACCOUNTS ------ \\
 
 const authenticateToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
