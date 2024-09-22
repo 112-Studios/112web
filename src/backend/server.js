@@ -33,11 +33,17 @@ const app = express();
 app.set('trust proxy', 1); // Trust first proxy
 app.use(json());
 app.use(helmet());
-app.use(cors()); // temporary
-// app.use(cors({
-//    origin: ['https://112-studios.github.io', 'https://15fe-89-153-106-173.ngrok-free.app']
-//}));
+app.use(cors({
+    origin: [
+        'https://112-studios.github.io', 
+        'https://15fe-89-153-106-173.ngrok-free.app',
+        'https://www.roblox.com/games/17598720975/SCP-Site-112-ALPHA-CLOSED'
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Authorization', 'Content-Type']
+}));
 app.use(limiter);
+
 
 // ------ CONNECTION WITH DATA-BASE ------ \\
 
