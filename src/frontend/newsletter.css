@@ -1,1 +1,313 @@
+/* Global Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer */
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.8) 30%, rgb(32, 32, 32) 100%);
+}
 
+/* Scrollbar hidden (for Chrome, Edge, Safari) */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Link Styles */
+a {
+    color: #8f8f8f;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #3a3939;
+    text-decoration: underline;
+}
+
+/* Animated Section Visibility */
+.open-position-styles {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.open-position-styles.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Back to Top Button */
+#back-to-top {
+    position: fixed;
+    bottom: 48px;
+    left: 48px;
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    display: none;
+    font-size: 18px;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+#back-to-top:hover {
+    color: #eeeeee;
+}
+
+/* Separator Line */
+.separator {
+    height: 1px;
+    background-color: #ffffff20;
+    margin: 0;
+    width: 100%;
+}
+
+/* Scroll Animations */
+section {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Active Link Highlight */
+nav a.active {
+    color: #8A837F;
+}
+
+/* Topbar Styles */
+.topbar {
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 15px 0;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.topbar::before, .topbar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 40px 50px 40px;
+    border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+}
+
+.topbar::before {
+    left: -40px;
+    transform: rotate(180deg);
+}
+
+.topbar::after {
+    right: -40px;
+}
+
+/* Navigation Link Styles */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.nav-links li a:hover {
+    background-color: #8A837F;
+    color: #ffffff;
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    padding-right: 40px;
+}
+
+.social-icon {
+    position: relative;
+    overflow: hidden;
+}
+
+.social-icon img {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+/* Neon Effects */
+.social-icon.youtube::before {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6);
+}
+
+.social-icon.instagram::before {
+    box-shadow: 0 0 10px rgba(255, 87, 34, 0.8), 0 0 20px rgba(255, 87, 34, 0.6);
+}
+
+.social-icon.x::before {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.social-icon.discord::before {
+    box-shadow: 0 0 10px rgba(0, 153, 255, 0.8), 0 0 20px rgba(0, 153, 255, 0.6);
+}
+
+.social-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border-radius: 35%;
+    background: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    z-index: 0;
+}
+
+.social-icon:hover::before {
+    opacity: 1;
+}
+
+.social-icon:hover img {
+    transform: scale(1.1);
+}
+
+/* Popup for Privacy Policy */
+.popup {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Privacy Popup Styles */
+#privacy-popup {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    padding: 20px;
+    border-top: 2px solid #8A837F;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;  /* Initially hidden */
+    pointer-events: none;  /* Prevent interaction when hidden */
+    transition: opacity 0.3s ease;
+}
+
+#privacy-popup.visible {
+    opacity: 1;
+    pointer-events: all; /* Allow interaction when visible */
+}
+
+/* Lock content style (dimmed and unclickable) */
+.locked-content {
+    pointer-events: none;
+    opacity: 0.5; /* Dim the content while it's locked */
+}
+
+
+.locked-content {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Center Newsletter Form on Screen */
+#newsletter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#newsletter-form label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+#newsletter-form input[type="email"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #8A837F;
+    border-radius: 8px;
+    background-color: #2b2b2b;
+    color: #ffffff;
+    outline: none;
+}
+
+#newsletter-form input[type="email"]:focus {
+    border-color: #ffffff;
+}
+
+#newsletter-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #8A837F;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#newsletter-form button:hover {
+    background-color: #6F665C;
+}
