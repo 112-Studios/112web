@@ -272,50 +272,22 @@ nav a.active {
 }
 
 .game-title {
-.game-title {
     font-size: 1.5rem;
     color: #fff;
     margin: 15px 0;
-    margin: 15px 0;
 }
 
-.game-stats {
 .game-stats {
     list-style-type: none;
     padding: 0;
     color: #ccc;
     margin: 0;
-    margin: 0;
 }
 
 .game-stats li {
     font-size: 1rem;
-    font-size: 1rem;
     margin-bottom: 5px;
 }
-
-.server-status {
-    color: #ff6666;
-    font-size: 0.9rem;
-    margin: 10px 0;
-}
-
-.learn-more {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #3a3a3a;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.learn-more:hover {
-    background-color: #5a5a5a;
-}
-
-  
 
 .server-status {
     color: #ff6666;
