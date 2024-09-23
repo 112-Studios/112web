@@ -12,14 +12,14 @@ body, html {
 
 /* Link Styles */
 a {
-    color: #8f8f8f; /* Change to your desired color */
-    text-decoration: none; /* Remove underline */
-    transition: color 0.3s; /* Smooth transition */
+    color: #8f8f8f;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
 a:hover {
-    color: #3a3939; /* Change to your desired hover color */
-    text-decoration: underline; /* Add underline on hover */
+    color: #3a3939;
+    text-decoration: underline;
 }
 
 .open-position-styles {
@@ -39,9 +39,9 @@ a:hover {
     position: fixed;
     bottom: 48px;
     left: 48px;
-    background-color: transparent; /* No background */
-    color: #ffffff; /* White arrow */
-    border: none; /* No border */
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
@@ -52,15 +52,15 @@ a:hover {
 }
 
 #back-to-top:hover {
-    background-color: transparent; /* No background on hover */
-    color: #eeeeee; /* Slightly lighter white on hover for better visibility */
+    background-color: transparent;
+    color: #eeeeee;
 }
 
 .separator {
-    height: 1px; /* Thickness of the separator */
-    background-color: #ffffff20; /* Default color */
-    margin: 0px 0; /* Space around the separator */
-    width: 100%; /* Full width */
+    height: 1px;
+    background-color: #ffffff20; 
+    margin: 0px 0;
+    width: 100%;
 }
 
 /* Scroll Animations */
@@ -106,7 +106,7 @@ nav a.active {
     height: 0;
     border-style: solid;
     border-width: 0 40px 50px 40px;
-    border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0) transparent;
 }
 
 .topbar::before {
@@ -157,15 +157,15 @@ nav a.active {
 }
 
 .social-icon {
-    position: relative; /* Needed for the pseudo-element */
-    overflow: hidden; /* Ensures the glow effect is contained */
+    position: relative;
+    overflow: hidden;
 }
 
 .social-icon img {
     width: 50px;
     height: 50px;
     transition: transform 0.3s ease;
-    z-index: 1; /* Ensure the image is above the neon effect by default */
+    z-index: 1; 
 }
 
 /* Neon Effects for Each Icon */
@@ -182,7 +182,7 @@ nav a.active {
 }
 
 .social-icon.discord::before {
-    box-shadow: 0 0 10px rgba(0, 153, 255, 0.8), 0 0 20px rgba(0, 153, 255, 0.6); /* Blue neon effect */
+    box-shadow: 0 0 10px rgba(0, 153, 255, 0.8), 0 0 20px rgba(0, 153, 255, 0.6); 
 }
 
 .social-icon::before {
@@ -190,23 +190,23 @@ nav a.active {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 120%; /* Slightly larger than the icon */
+    width: 120%; 
     height: 120%;
-    border-radius: 35%; /* Makes the glow effect round */
-    background: rgba(0, 0, 0, 0); /* Transparent background initially */
+    border-radius: 35%; 
+    background: rgba(0, 0, 0, 0); 
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease;
     opacity: 0;
-    z-index: 0; /* Ensure the neon effect is behind the image */
+    z-index: 0;
 }
 
 /* Hover Effect */
 .social-icon:hover::before {
-    opacity: 1; /* Show the neon effect on hover */
+    opacity: 1;
 }
 
 .social-icon:hover img {
-    transform: scale(1.1); /* Slight zoom effect on hover */
+    transform: scale(1.1); 
 }
 
 /* Centered Image and Text */
@@ -216,8 +216,8 @@ nav a.active {
 }
 
 .image-container img {
-    width: 50%; /* Adjust size as needed */
-    max-width: 800px; /* For responsiveness */
+    width: 50%; 
+    max-width: 800px;
     border-radius: 15px;
 }
 

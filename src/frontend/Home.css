@@ -12,14 +12,14 @@ body, html {
 
 /* Link Styles */
 a {
-    color: #8f8f8f; /* Change to your desired color */
-    text-decoration: none; /* Remove underline */
-    transition: color 0.3s; /* Smooth transition */
+    color: #8f8f8f;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
 a:hover {
-    color: #3a3939; /* Change to your desired hover color */
-    text-decoration: underline; /* Add underline on hover */
+    color: #3a3939;
+    text-decoration: underline;
 }
 
 .open-position-styles {
@@ -39,9 +39,9 @@ a:hover {
     position: fixed;
     bottom: 48px;
     left: 48px;
-    background-color: transparent; /* No background */
-    color: #ffffff; /* White arrow */
-    border: none; /* No border */
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
@@ -52,15 +52,15 @@ a:hover {
 }
 
 #back-to-top:hover {
-    background-color: transparent; /* No background on hover */
-    color: #eeeeee; /* Slightly lighter white on hover for better visibility */
+    background-color: transparent;
+    color: #eeeeee;
 }
 
 .separator {
-    height: 1px; /* Thickness of the separator */
-    background-color: #ffffff20; /* Default color */
-    margin: 0px 0; /* Space around the separator */
-    width: 100%; /* Full width */
+    height: 1px;
+    background-color: #ffffff20; 
+    margin: 0px 0;
+    width: 100%;
 }
 
 /* Scroll Animations */
@@ -106,7 +106,7 @@ nav a.active {
     height: 0;
     border-style: solid;
     border-width: 0 40px 50px 40px;
-    border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0) transparent;
 }
 
 .topbar::before {
@@ -157,15 +157,15 @@ nav a.active {
 }
 
 .social-icon {
-    position: relative; /* Needed for the pseudo-element */
-    overflow: hidden; /* Ensures the glow effect is contained */
+    position: relative;
+    overflow: hidden;
 }
 
 .social-icon img {
     width: 50px;
     height: 50px;
     transition: transform 0.3s ease;
-    z-index: 1; /* Ensure the image is above the neon effect by default */
+    z-index: 1; 
 }
 
 /* Neon Effects for Each Icon */
@@ -182,7 +182,7 @@ nav a.active {
 }
 
 .social-icon.discord::before {
-    box-shadow: 0 0 10px rgba(0, 153, 255, 0.8), 0 0 20px rgba(0, 153, 255, 0.6); /* Blue neon effect */
+    box-shadow: 0 0 10px rgba(0, 153, 255, 0.8), 0 0 20px rgba(0, 153, 255, 0.6); 
 }
 
 .social-icon::before {
@@ -190,83 +190,114 @@ nav a.active {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 120%; /* Slightly larger than the icon */
+    width: 120%; 
     height: 120%;
-    border-radius: 35%; /* Makes the glow effect round */
-    background: rgba(0, 0, 0, 0); /* Transparent background initially */
+    border-radius: 35%; 
+    background: rgba(0, 0, 0, 0); 
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease;
     opacity: 0;
-    z-index: 0; /* Ensure the neon effect is behind the image */
+    z-index: 0;
 }
 
 /* Hover Effect */
 .social-icon:hover::before {
-    opacity: 1; /* Show the neon effect on hover */
+    opacity: 1;
 }
 
 .social-icon:hover img {
-    transform: scale(1.1); /* Slight zoom effect on hover */
+    transform: scale(1.1); 
 }
 
-/* Game Card Styles */
-.game-image {
-    width: 50%;
-    margin-top: -250%;
-    right: auto;
-    border: 1px solid #000000;
+/* Centered Image and Text */
+.image-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.image-container img {
+    width: 50%; 
+    max-width: 800px;
     border-radius: 15px;
-    align-self: center;
 }
 
-.game-main-details {
-    margin-top: 15px;
-    text-align: center; 
-    text-wrap: normal; 
-    width: 35%; 
-    margin-right: auto; 
-    margin-left: auto; 
-    line-height: 1.5;
+.image-text {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    color: #cccccc;
 }
 
-.game-card {
-    border: 1px solid #ddd;
+/* Games Section */
+.games-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 0;
+}
+
+.game-item {
+    background: linear-gradient(145deg, #1b1b1b, #121212);
     border-radius: 15px;
-    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    margin: 15px;
     width: 300px;
-    margin: 0 left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #111;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
 }
 
-.game-card-image {
+.game-item:hover {
+    transform: scale(1.05);
+}
+
+.game-image {
     width: 100%;
     height: auto;
-    display: block;
+    border-bottom: 1px solid #444;
 }
 
-.game-card-details {
-    padding: 20px;
-    text-align: center;
-    background-color: #1a1a1a;
-}
-
-.game-card-details h3 {
+.game-title {
     font-size: 1.5rem;
-    margin-bottom: 10px;
     color: #fff;
+    margin: 15px 0;
 }
 
-.game-card-stats {
+.game-stats {
     list-style-type: none;
     padding: 0;
     color: #ccc;
+    margin: 0;
 }
 
 .game-stats li {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-bottom: 5px;
 }
+
+.server-status {
+    color: #ff6666;
+    font-size: 0.9rem;
+    margin: 10px 0;
+}
+
+.learn-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #3a3a3a;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.learn-more:hover {
+    background-color: #5a5a5a;
+}
+
+  
   
   
 .link-icon {

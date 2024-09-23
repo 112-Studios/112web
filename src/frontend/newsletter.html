@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta and CSS Links -->
+  <link rel="icon" type="image/png" href="images/favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Subscribe to 112-Studios newsletter for news about it games and the studio self!">
+  <title>Newsletter - 112-Studios</title>
+  <link rel="stylesheet" href="newsletter.css">
+</head>
+<body>
+  
+  <!-- Navigation Bar -->
+  <header class="topbar">
+    <nav class="nav-container">
+      <ul class="nav-links">
+        <li><a href="Home.html#home">HOME</a></li>
+        <li><a href="About-Us.html#about">ABOUT</a></li>
+        <li><a href="Games.html#games">GAMES</a></li>
+        <li><a href="Careers.html#careers">CAREERS</a></li>
+        <li><a href="newsletter.html">NEWSLETTER</a></li>
+      </ul>
+
+      <!-- Social Media Icons -->
+      <div class="social-icons">
+        <a href="https://www.youtube.com/@112SCPSTUDIOS" target="_blank" class="social-icon youtube">
+          <img src="images/yt-logo.png" alt="YouTube">
+        </a>
+        <a href="https://x.com/site_112" target="_blank" class="social-icon x">
+          <img src="images/twitter-logo.png" alt="X (formerly Twitter)">
+        </a>
+        <a href="https://www.instagram.com/scp_site_112/" target="_blank" class="social-icon instagram">
+          <img src="images/insta-logo.png" alt="Instagram">
+        </a>
+        <a href="https://discord.gg/skaj92gbXA" target="_blank" class="social-icon discord">
+          <img src="images/discord-logo.png" alt="Discord">
+        </a>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Privacy Policy and ToS Pop-up -->
+  <div id="privacy-popup">
+    <p>Please accept our <a href="PrivacyPolicy.html" target="_blank">Privacy Policy</a> and <a href="TermsOfService.html" target="_blank">Terms of Service</a> before proceeding.</p>
+    <button id="accept-policy-btn">I Accept</button>
+  </div>
+  
+  <!-- Newsletter Form -->
+  <form id="newsletter-form" action="http://localhost:5500/subscribe" method="post" style="display: none;">
+    <input type="email" id="email" name="email" placeholder="Enter your email" required />
+    <button type="submit">Subscribe</button>
+  </form>
+
+  <script type="module" src="emailsSubs.js"></script>
+  <script type="module" src="userEx.js"></script>
+</body>
+</html>
