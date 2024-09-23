@@ -13,7 +13,7 @@ const port = 5500;
 const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com'];
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const csvFilePath = join(__dirname, 'models', 'newsSubs.csv');
+const csvFilePath = join(__dirname, 'newsSubs.csv');
 const csvWriter = createCsvWriter({
   path: csvFilePath,
   header: [
