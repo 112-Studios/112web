@@ -177,10 +177,6 @@ nav a.active {
     box-shadow: 0 0 10px rgba(255, 87, 34, 0.8), 0 0 20px rgba(255, 87, 34, 0.6);
 }
 
-.social-icon.x::before {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
-}
-
 .social-icon.discord::before {
     box-shadow: 0 0 10px rgba(0, 153, 255, 0.8), 0 0 20px rgba(0, 153, 255, 0.6); 
 }
@@ -304,7 +300,7 @@ nav a.active {
 
 /* Contact Section */
 #contact-two {
-    text-align: center; /* Center text and icon */
+    text-align: center;
     margin-top: 20px;
 }
 
@@ -325,7 +321,7 @@ nav a.active {
 
 .flag-icons-two img {
     margin-left: 5px;
-    width: 50px; /* Adjust the size of the flags */
+    width: 50px;
     height: 32px;
     border-radius: 5px;
 }
